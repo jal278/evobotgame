@@ -2,7 +2,7 @@ import pygame, pypong
 from pypong.player import BasicAIPlayer, KeyboardPlayer, MousePlayer
 input_state = {'key': None, 'mouse': None}
     
-def run(p1,p2,render=True):
+def run(p1,p2,render=True,seed=None):
     global input_state
     configuration = {
         'screen_size': (686,488),
@@ -23,6 +23,7 @@ def run(p1,p2,render=True):
         'sound_paddle': 'assets/bounce-paddle.wav',
         'sound_wall': 'assets/bounce-wall.wav',
         'sound': True,
+        'seed':seed,
         'render':render
     }
 

@@ -7,6 +7,7 @@ def load_image(path):
      pygame.surfarray.pixels3d(surface)[:,:,0:1:] = 0
     else:
      surface = pygame.image.load(path)
+     pygame.surfarray.pixels3d(surface)[:,:,0:1:] = 0
     return surface
 
 def line_line_intersect(x1, y1, x2, y2, x3, y3, x4, y4):
@@ -36,6 +37,8 @@ def line_line_intersect(x1, y1, x2, y2, x3, y3, x4, y4):
 class Game(object):
     render=True
     def __init__(self, player_left, player_right, configuration):
+        if(configuration['seed']!=None):
+         random.seed(configuration['seed'])
         Game.render=configuration['render']
         self.player_left = player_left
         self.player_right = player_right
