@@ -68,6 +68,7 @@ class NEATGenome(abstract.Genome):
     weight_factor=2.0
     num_inp=3
     num_out=1
+    recurrent=False
 
     activation_list = [signed_sigmoid,abs_activate,sin_activate,gauss_activate,linear_activate]
     default_activation = [signed_sigmoid]
@@ -142,7 +143,7 @@ class NEATGenome(abstract.Genome):
                     continue
                 if(b[0]==NEATGenome.OUTPUT):
                     continue
-                if(IsCyclic(self.connections+[(n1,n2,weight,NEATGenome.innovation_number,True)],self.nodes)):
+                if(not NEATGenome.recurrent and IsCyclic(self.connections+[(n1,n2,weight,NEATGenome.innovation_number,True)],self.nodes)):
                     continue
                 dup=False
                 for k in self.connections:
@@ -352,19 +353,21 @@ class NEATNode:
         self.number= node[1]
         self.af = node[2]
         self.activation = 0.0
+        self.out=0.0
         self.done=0.0
         self.connections = []
     def clear(self):
         self.activation = 0.0
-        self.done=0.0
+        self.out=0.0
+        self.done=False
     def load(self,val):
-        self.activation=val
-        self.done=1.0
+        self.out=val
+        self.done=True
     def activate(self):
-        self.activation=self.af(self.activation)
+        self.out=self.af(self.activation)
         self.done=True
     def get(self):
-        return self.activation
+        return self.out
     def add_connection(self,fromNode,weight):
         self.connections.append((fromNode,weight))
 
@@ -416,10 +419,23 @@ class NEATPhenome(abstract.Phenome):
             for y in x.connections:
                 if not y[0].done:
                     self.propogate_back([y[0],],depth+1)
-                x.activation+=y[0].activation*y[1]
+                x.activation+=y[0].out*y[1]
             x.activate()
             
-        
+    def load_inputs(self,inp):
+        for x in range(len(self.inputs)):
+            self.inputs[x].load(inp[x])
+   
+    def get_outputs(self):
+        return map(lambda x:x.get(),self.outputs)
+ 
+    def run_step(self):
+        for x in self.hidden+self.outputs:
+            x.activation=0.0
+            for y in x.connections:
+                x.activation+=y[0].out*y[1]
+            x.activate()
+   
     def run_inputs(self,inp):
         self.clear_network()
         

@@ -11,7 +11,9 @@ class ANNPlayer(object):
    centery = float(paddle.rect.centery) / (game.bounds.bottom)
    bally = float(game.ball.rect.centery) / (game.bounds.bottom)
    inputs=[centery,centery-bally,1.0] 
-   output=self.ann.run_inputs(inputs)[0]
+   self.ann.load_inputs(inputs)
+   self.ann.run_step()
+   output=self.ann.get_outputs()[0]
  
    if(output>0.7):
     paddle.direction=1
@@ -29,6 +31,8 @@ class ANNPlayer(object):
   def won(self):
        pass
 
+  def reset(self):
+       pass
     
 #neat domain for pong
 class PongDomain(abstract.Domain):
@@ -37,7 +41,7 @@ class PongDomain(abstract.Domain):
 
     def run_phenome(self,phenome):
        results=[0,0]
-       for x in range(3):
+       for x in range(4):
         netplayer=ANNPlayer(phenome)
         opponent= pongrunner.BasicAIPlayer()
         temp=pongrunner.run(netplayer,opponent,False,x)
@@ -46,7 +50,7 @@ class PongDomain(abstract.Domain):
        score=results[0]-results[1]
        return max(0.01,score+50)
 
-evolve=False
+evolve=True
 pop = abstract.SpeciatedPopulation(100,NEATGenome,PongDomain,NEATPhenome)
 champ=None
 

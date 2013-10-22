@@ -39,6 +39,8 @@ class Game(object):
     def __init__(self, player_left, player_right, configuration):
         if(configuration['seed']!=None):
          random.seed(configuration['seed'])
+        player_left.reset()
+        player_right.reset()
         Game.render=configuration['render']
         self.player_left = player_left
         self.player_right = player_right
@@ -67,7 +69,7 @@ class Game(object):
         self.running = True
         
     def play_sound(self, sound):
-        if self.configuration['sound']:
+        if self.configuration['sound'] and self.configuration['render']:
             sound.play()
         
     def reset_game(self, serveLeft=True):

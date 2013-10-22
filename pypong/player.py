@@ -2,6 +2,9 @@ import pygame, random
 
 class BasicAIPlayer(object):
     def __init__(self):
+        self.reset()
+
+    def reset(self):
         self.bias = random.random() - 0.5
         self.hit_count = 0
         
