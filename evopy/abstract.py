@@ -135,6 +135,9 @@ class Population:
         self.pop.sort(cmp=Genome.__cmpreal__)
         del self.pop[0]
 
+    def sort_population(self):
+        self.pop.sort(cmp=Genome.__cmpreal__)
+
     def create_new(self):
         mom=self.select()
         dad=self.select()
@@ -175,6 +178,7 @@ class Population:
         for x in range(gens):
             self.run_epoch()
             print self
+
     def __repr__(self):
         out=""
         out+="PopSize %d, MaxFit %f\n" % (len(self.pop),self.max_fit())
@@ -280,7 +284,8 @@ class SpeciatedPopulation(Population):
         for x in range(gens):
             self.run_epoch()
             print x,self.max_fit(),len(self.species)
-            
+        self.sort_population()
+    
     def __repr__(self):
         out=""
         out+="PopSize %d, MaxFit %f, NumSpecies %d\n" % (len(self.pop),self.max_fit(),len(self.species))
