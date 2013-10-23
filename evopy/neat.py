@@ -434,6 +434,7 @@ class NEATPhenome(abstract.Phenome):
             x.activation=0.0
             for y in x.connections:
                 x.activation+=y[0].out*y[1]
+        for x in self.hidden+self.outputs:  
             x.activate()
    
     def run_inputs(self,inp):

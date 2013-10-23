@@ -14,10 +14,11 @@ class ANNPlayer(object):
    self.ann.load_inputs(inputs)
    self.ann.run_step()
    output=self.ann.get_outputs()[0]
+   #print output
  
-   if(output>0.7):
+   if(output>0.3):
     paddle.direction=1
-   elif(output<0.3):
+   elif(output<-0.3):
     paddle.direction=-1
    else:
     paddle.direction=0
@@ -50,8 +51,9 @@ class PongDomain(abstract.Domain):
        score=results[0]-results[1]
        return max(0.01,score+50)
 
-evolve=True
+evolve=False
 pop = abstract.SpeciatedPopulation(100,NEATGenome,PongDomain,NEATPhenome)
+domain = PongDomain()
 champ=None
 
 if(evolve):
@@ -65,10 +67,7 @@ else:
 
 champ_phenome=NEATPhenome(champ)
 player=ANNPlayer(champ_phenome)
-print pongrunner.run(player,pongrunner.BasicAIPlayer(),False,2)
-print pongrunner.run(player,pongrunner.BasicAIPlayer(),False,2)
-print pongrunner.run(player,pongrunner.BasicAIPlayer(),False,2)
-print pongrunner.run(player,pongrunner.BasicAIPlayer(),False,2)
-print pongrunner.run(player,pongrunner.BasicAIPlayer(),False,2)
-print pongrunner.run(player,pongrunner.BasicAIPlayer(),False,2)
-#pongrunner.run(player,pongrunner.MousePlayer(pongrunner.input_state),True,0)
+print domain.run_phenome(champ_phenome)
+
+print pongrunner.run(player,pongrunner.BasicAIPlayer(),False,1)
+pongrunner.run(player,pongrunner.BasicAIPlayer(),True,1)
