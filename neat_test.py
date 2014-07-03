@@ -38,7 +38,7 @@ while fitness<3.9:
  new_fitness=domain.run_phenome(new_phenome)
 
  if(new_fitness > fitness):
-   print iteration,new_fitness, new_genome
+   print iteration,new_fitness
    fitness=new_fitness
    genome=new_genome
 

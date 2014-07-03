@@ -175,6 +175,7 @@ class Population:
      
     def run(self,gens=100):
         self.evaluate_pop()
+        print "Evolution starting..."
         for x in range(gens):
             self.run_epoch()
             print self
@@ -279,11 +280,13 @@ class SpeciatedPopulation(Population):
         self.speciate()
      
     def run(self,gens=100):
+        print "Starting Evolution..."
         self.evaluate_pop()
         self.speciate()
         for x in range(gens):
             self.run_epoch()
-            print x,self.max_fit(),len(self.species)
+            print "Generation %d. Best fitness: %f. #Species: %d", (x,self.max_fit(),len(self.species))
+
         self.sort_population()
     
     def __repr__(self):

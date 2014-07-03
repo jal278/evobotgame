@@ -1,3 +1,4 @@
+import sys
 import pypong
 import pongrunner
 from evopy.neat import *
@@ -43,7 +44,7 @@ class PongDomain(abstract.Domain):
 
     def run_phenome(self,phenome):
        results=[0,0]
-       for x in range(4):
+       for x in range(5):
         phenome.clear_network()
         netplayer=ANNPlayer(phenome)
         opponent= pongrunner.BasicAIPlayer()
@@ -53,15 +54,20 @@ class PongDomain(abstract.Domain):
        score=results[0]-results[1]
        return max(0.01,score+50)
 
-evolve=True
-pop = abstract.SpeciatedPopulation(100,NEATGenome,PongDomain,NEATPhenome)
+
+evolve=False
+
+if(len(sys.argv)>1 and sys.argv[1]=='evolve'):
+ evolve=True
+
+pop = abstract.SpeciatedPopulation(200,NEATGenome,PongDomain,NEATPhenome)
 domain = PongDomain()
 champ=None
 
 if(evolve):
  NEATGenome.num_inputs=3
  NEATGenome.num_outputs=1
- pop.run(5)
+ pop.run(100)
  champ=pop.pop[-1]
  champ.save("pop_champ")
 else:
